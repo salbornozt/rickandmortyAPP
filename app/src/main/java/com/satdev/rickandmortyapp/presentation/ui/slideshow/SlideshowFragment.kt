@@ -1,4 +1,4 @@
-package com.satdev.rickandmortyapp.ui.settings
+package com.satdev.rickandmortyapp.presentation.ui.slideshow
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,13 +8,12 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.satdev.rickandmortyapp.R
-import com.satdev.rickandmortyapp.databinding.FragmentSettingsBinding
+import com.satdev.rickandmortyapp.databinding.FragmentSlideshowBinding
 
-class SettingsFragment : Fragment() {
+class SlideshowFragment : Fragment() {
 
-    private lateinit var settingsViewModel: SettingsViewModel
-    private var _binding: FragmentSettingsBinding? = null
+    private lateinit var slideshowViewModel: SlideshowViewModel
+    private var _binding: FragmentSlideshowBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -25,14 +24,14 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        settingsViewModel =
-            ViewModelProvider(this).get(SettingsViewModel::class.java)
+        slideshowViewModel =
+            ViewModelProvider(this).get(SlideshowViewModel::class.java)
 
-        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        _binding = FragmentSlideshowBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textSettings
-        settingsViewModel.text.observe(viewLifecycleOwner, Observer {
+        val textView: TextView = binding.textSlideshow
+        slideshowViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

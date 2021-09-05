@@ -1,4 +1,4 @@
-package com.satdev.rickandmortyapp.ui.transform
+package com.satdev.rickandmortyapp.presentation.ui.transform
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.satdev.rickandmortyapp.R
 import com.satdev.rickandmortyapp.databinding.FragmentTransformBinding
 import com.satdev.rickandmortyapp.databinding.ItemTransformBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Fragment that demonstrates a responsive layout pattern where the format of the content
@@ -22,9 +25,10 @@ import com.satdev.rickandmortyapp.databinding.ItemTransformBinding
  * the [RecyclerView] using LinearLayoutManager in a small screen
  * and shows items using GridLayoutManager in a large screen.
  */
+@AndroidEntryPoint
 class TransformFragment : Fragment() {
 
-    private lateinit var transformViewModel: TransformViewModel
+    private val transformViewModel: TransformViewModel by viewModels()
     private var _binding: FragmentTransformBinding? = null
 
     // This property is only valid between onCreateView and
@@ -36,7 +40,6 @@ class TransformFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        transformViewModel = ViewModelProvider(this).get(TransformViewModel::class.java)
         _binding = FragmentTransformBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -45,6 +48,9 @@ class TransformFragment : Fragment() {
         recyclerView.adapter = adapter
         transformViewModel.texts.observe(viewLifecycleOwner, {
             adapter.submitList(it)
+        })
+        transformViewModel.getCharacters().observe(viewLifecycleOwner, Observer {
+
         })
         return root
     }
