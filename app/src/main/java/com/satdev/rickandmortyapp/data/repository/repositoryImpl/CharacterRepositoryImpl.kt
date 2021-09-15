@@ -7,11 +7,11 @@ import com.satdev.rickandmortyapp.domain.repository.CharacterRepository
 import javax.inject.Inject
 
 class CharacterRepositoryImpl @Inject constructor(private val characterRemoteDataSource: CharacterRemoteDataSource): CharacterRepository {
-    override suspend fun getCharacters(): Resource<ArrayList<Character>?> {
+    override suspend fun getCharacters(page: String): Resource<ArrayList<Character>?> {
         var characterList : ArrayList<Character> ?= null
         var rta : Resource<ArrayList<Character>?> = Resource.Loading()
         try {
-            val response = characterRemoteDataSource.getCharacters()
+            val response = characterRemoteDataSource.getCharacters(page)
             val body = response.body()
             if (body != null){
                 characterList = ArrayList(body.characters)

@@ -14,10 +14,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.satdev.rickandmortyapp.R
+import com.satdev.rickandmortyapp.data.model.Character
 import com.satdev.rickandmortyapp.databinding.FragmentTransformBinding
 import com.satdev.rickandmortyapp.databinding.ItemTransformBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.random.Random
 
 /**
  * Fragment that demonstrates a responsive layout pattern where the format of the content
@@ -49,9 +52,12 @@ class TransformFragment : Fragment() {
         transformViewModel.texts.observe(viewLifecycleOwner, {
             adapter.submitList(it)
         })
+        /*
         transformViewModel.getCharacters().observe(viewLifecycleOwner, Observer {
 
         })
+
+         */
         return root
     }
 
@@ -60,34 +66,17 @@ class TransformFragment : Fragment() {
         _binding = null
     }
 
-    class TransformAdapter :
-        ListAdapter<String, TransformViewHolder>(object : DiffUtil.ItemCallback<String>() {
+    class TransformAdapter() :
+        ListAdapter<Character, TransformViewHolder>(object : DiffUtil.ItemCallback<Character>() {
 
-            override fun areItemsTheSame(oldItem: String, newItem: String): Boolean =
+            override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean =
                 oldItem == newItem
 
-            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean =
+            override fun areContentsTheSame(oldItem: Character, newItem: Character): Boolean =
                 oldItem == newItem
         }) {
 
-        private val drawables = listOf(
-            R.drawable.avatar_1,
-            R.drawable.avatar_2,
-            R.drawable.avatar_3,
-            R.drawable.avatar_4,
-            R.drawable.avatar_5,
-            R.drawable.avatar_6,
-            R.drawable.avatar_7,
-            R.drawable.avatar_8,
-            R.drawable.avatar_9,
-            R.drawable.avatar_10,
-            R.drawable.avatar_11,
-            R.drawable.avatar_12,
-            R.drawable.avatar_13,
-            R.drawable.avatar_14,
-            R.drawable.avatar_15,
-            R.drawable.avatar_16,
-        )
+
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransformViewHolder {
             val binding = ItemTransformBinding.inflate(LayoutInflater.from(parent.context))
@@ -95,10 +84,17 @@ class TransformFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: TransformViewHolder, position: Int) {
-            holder.textView.text = getItem(position)
+            holder.textView.text = getItem(position).name
+            try {
+                Glide.with(holder.imageView).load(getItem(position).image).into(holder.imageView)
+            } catch (e: Exception) {
+            }
+            /*
             holder.imageView.setImageDrawable(
-                ResourcesCompat.getDrawable(holder.imageView.resources, drawables[position], null)
+                ResourcesCompat.getDrawable(holder.imageView.resources, drawables[Random.nextInt(0,15)], null)
             )
+
+             */
         }
     }
 

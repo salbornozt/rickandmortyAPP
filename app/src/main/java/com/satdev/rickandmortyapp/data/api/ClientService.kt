@@ -8,5 +8,7 @@ import retrofit2.http.Query
 
 interface ClientService {
     @GET("character")
-    suspend fun getCharacters():Response<CharacterList>
+    suspend fun getCharacters(@Query(
+        "page"
+    ) page: String):Response<CharacterList>
 }

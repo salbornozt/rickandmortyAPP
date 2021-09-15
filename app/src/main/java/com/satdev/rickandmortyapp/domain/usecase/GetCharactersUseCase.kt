@@ -7,6 +7,6 @@ import javax.inject.Inject
 
 class GetCharactersUseCase @Inject constructor(private val characterRepository: CharacterRepository) {
 
-    suspend fun execute():Resource<ArrayList<Character>?> = characterRepository.getCharacters()
+    suspend fun execute(page:String):Resource<ArrayList<Character>?> = characterRepository.getCharacters(page)
 
 }
