@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +20,12 @@ import com.satdev.rickandmortyapp.R
 import com.satdev.rickandmortyapp.data.model.Character
 import com.satdev.rickandmortyapp.databinding.FragmentTransformBinding
 import com.satdev.rickandmortyapp.databinding.ItemTransformBinding
+import com.satdev.rickandmortyapp.presentation.adapters.CharacterAdapter
+import com.satdev.rickandmortyapp.presentation.comparators.CharacterComparator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 /**
@@ -33,6 +39,7 @@ class TransformFragment : Fragment() {
 
     private val transformViewModel: TransformViewModel by viewModels()
     private var _binding: FragmentTransformBinding? = null
+    val pagingAdapter = CharacterAdapter(CharacterComparator)
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -47,11 +54,19 @@ class TransformFragment : Fragment() {
         val root: View = binding.root
 
         val recyclerView = binding.recyclerviewTransform
-        val adapter = TransformAdapter()
-        recyclerView.adapter = adapter
+
+        recyclerView.adapter = pagingAdapter
+        /*
         transformViewModel.texts.observe(viewLifecycleOwner, {
             adapter.submitList(it)
         })
+
+         */
+        viewLifecycleOwner.lifecycleScope.launch {
+            transformViewModel.flow.collectLatest {
+                pagingAdapter.submitData(it)
+            }
+        }
         /*
         transformViewModel.getCharacters().observe(viewLifecycleOwner, Observer {
 
