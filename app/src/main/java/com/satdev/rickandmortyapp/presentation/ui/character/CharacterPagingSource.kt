@@ -1,10 +1,11 @@
-package com.satdev.rickandmortyapp.presentation.ui.transform
+package com.satdev.rickandmortyapp.presentation.ui.character
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.satdev.rickandmortyapp.data.model.Character
 import com.satdev.rickandmortyapp.data.util.Resource
 import com.satdev.rickandmortyapp.domain.usecase.GetCharactersUseCase
+import java.lang.Exception
 
 class CharacterPagingSource(
     private val getCharactersUseCase: GetCharactersUseCase
@@ -28,15 +29,22 @@ class CharacterPagingSource(
         val nextPageNumber = params.key ?: 1
         val previousKey = if (nextPageNumber == 1) null else nextPageNumber - 1
         val response = getCharactersUseCase.execute(nextPageNumber.toString())
-        response.exception?.let {
-            return LoadResult.Error(it)
+        return when(response){
+            is Resource.Success->{
+                LoadResult.Page(
+                    data = response.data!!.characters.map { it },
+                    prevKey = previousKey, // Only paging forward.
+                    nextKey = geNextIndexFromPage(response.data!!.information.next)
+                )
+            }
+            is Resource.Error->{
+                return LoadResult.Error(Exception(response.message))
+            }
+            else -> {
+                return LoadResult.Error(Exception(""))
+            }
         }
 
-        return LoadResult.Page(
-            data = response.data!!.characters.map { it },
-            prevKey = previousKey, // Only paging forward.
-            nextKey = geNextIndexFromPage(response.data!!.information.next)
-        )
     }
 
     private fun geNextIndexFromPage(page:String):Int{

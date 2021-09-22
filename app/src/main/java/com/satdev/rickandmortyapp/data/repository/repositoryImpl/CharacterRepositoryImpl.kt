@@ -18,11 +18,27 @@ class CharacterRepositoryImpl @Inject constructor(private val characterRemoteDat
                 characterPage = body
                 rta = Resource.Success(characterPage)
             }else{
-                rta = Resource.Success(null)
+                rta = Resource.Error("No data found")
             }
         }catch (e:Exception){
              rta= Resource.Error(e.message!!,e)
         }
         return rta
+    }
+
+    override suspend fun getCharacterDetail(characterId: Int): Resource<Character?> {
+        var characterResult : Resource<Character?> = Resource.Loading()
+        characterResult = try {
+            val response = characterRemoteDataSource.getCharacterDetail(characterId)
+            if (response.isSuccessful){
+                Resource.Success(response.body())
+            }else{
+                Resource.Error(response.message())
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message!!,e)
+        }
+
+        return characterResult
     }
 }

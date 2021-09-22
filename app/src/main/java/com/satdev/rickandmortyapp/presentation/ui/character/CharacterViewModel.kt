@@ -1,4 +1,4 @@
-package com.satdev.rickandmortyapp.presentation.ui.transform
+package com.satdev.rickandmortyapp.presentation.ui.character
 
 import android.app.Application
 import androidx.lifecycle.*
@@ -6,7 +6,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.satdev.rickandmortyapp.data.model.Character
-import com.satdev.rickandmortyapp.data.util.Resource
 import com.satdev.rickandmortyapp.domain.usecase.GetCharactersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +14,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class TransformViewModel @Inject constructor(application: Application,private val getCharactersUseCase: GetCharactersUseCase) : AndroidViewModel(application) {
+class CharacterViewModel @Inject constructor(application: Application, private val getCharactersUseCase: GetCharactersUseCase) : AndroidViewModel(application) {
 
     private val _characterList :MutableLiveData<ArrayList<Character>> by lazy {
         MutableLiveData<ArrayList<Character>>().apply {

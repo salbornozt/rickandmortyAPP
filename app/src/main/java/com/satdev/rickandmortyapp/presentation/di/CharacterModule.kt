@@ -5,6 +5,7 @@ import com.satdev.rickandmortyapp.data.repository.dataSource.CharacterRemoteData
 import com.satdev.rickandmortyapp.data.repository.dataSourceImpl.CharacterRemoteDataSourceImpl
 import com.satdev.rickandmortyapp.data.repository.repositoryImpl.CharacterRepositoryImpl
 import com.satdev.rickandmortyapp.domain.repository.CharacterRepository
+import com.satdev.rickandmortyapp.domain.usecase.GetCharacterDetailUseCase
 import com.satdev.rickandmortyapp.domain.usecase.GetCharactersUseCase
 import dagger.Module
 import dagger.Provides
@@ -17,15 +18,23 @@ import javax.inject.Singleton
 object CharacterModule {
     @Provides
     @Singleton
-    fun providesCharacterRepository(characterRemoteDataSource: CharacterRemoteDataSource):CharacterRepository = CharacterRepositoryImpl(characterRemoteDataSource)
+    fun providesCharacterRepository(characterRemoteDataSource: CharacterRemoteDataSource): CharacterRepository =
+        CharacterRepositoryImpl(characterRemoteDataSource)
 
     @Provides
     @Singleton
-    fun providesCharacterRemoteDatasource(clientService: ClientService):CharacterRemoteDataSource = CharacterRemoteDataSourceImpl(clientService)
+    fun providesCharacterRemoteDatasource(clientService: ClientService): CharacterRemoteDataSource =
+        CharacterRemoteDataSourceImpl(clientService)
 
     @Provides
     @Singleton
-    fun providesGetCharactersUseCase(characterRepository: CharacterRepository) : GetCharactersUseCase = GetCharactersUseCase(characterRepository)
+    fun providesGetCharactersUseCase(characterRepository: CharacterRepository): GetCharactersUseCase =
+        GetCharactersUseCase(characterRepository)
+
+    @Provides
+    @Singleton
+    fun providesGetCharacterDetailUseCase(characterRepository: CharacterRepository): GetCharacterDetailUseCase =
+        GetCharacterDetailUseCase(characterRepository)
 
 
 }
