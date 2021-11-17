@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.satdev.rickandmortyapp.data.model.Character
 import com.satdev.rickandmortyapp.databinding.FragmentTransformBinding
 import com.satdev.rickandmortyapp.presentation.adapters.CharacterAdapter
 import com.satdev.rickandmortyapp.presentation.comparators.CharacterComparator
+import com.satdev.rickandmortyapp.presentation.ui.character.detail.CharacterDetailFragment
 import com.satdev.rickandmortyapp.presentation.ui.listeners.CharacterAdapterListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -72,5 +74,9 @@ class CharacterFragment : Fragment(),CharacterAdapterListener {
 
     override fun getItemSelected(position: Int?, character: Character?) {
         println("$position $character")
+        //val action = CharacterDetailFragmentDirections
+        val action  = CharacterFragmentDirections.actionNavCharactersToCharacterDetailFragment(character)
+        findNavController().navigate(action)
+
     }
 }
